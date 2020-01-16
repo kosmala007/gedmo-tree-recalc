@@ -1,0 +1,25 @@
+{
+    "name": "devpack/gedmo-tree-recalc",
+    "description": "Recalc Gedmo Tree (Doctrine Behavioral Extensions)",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marcin Kosmala",
+            "email": "kosmala007@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5",
+        "symfony/var-dumper": "^4.4"
+    },
+    "autoload": {
+        "psr-4": { "DevPack\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    }
+}
