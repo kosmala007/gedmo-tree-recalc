@@ -20,9 +20,9 @@
         "symfony/var-dumper": "^4.4"
     },
     "autoload": {
-        "psr-4": { "DevPack\\": "" },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+        "psr-4": {
+            "DevPack\\": "src/",
+            "DevPack\\Tests\\": "tests/"
+        }
     }
 }

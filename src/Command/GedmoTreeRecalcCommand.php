@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class TestCommand extends Command
+class GedmoTreeRecalcCommand extends Command
 {
     private $em;
 
@@ -19,8 +19,9 @@ class TestCommand extends Command
 
     public function __construct(EntityManagerInterface $em)
     {
-        parent::__construct();
         $this->em = $em;
+
+        parent::__construct();
     }
 
     protected function configure()
@@ -35,6 +36,8 @@ class TestCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        $output->writeln('Success!!!');
 
         return 0;
     }
