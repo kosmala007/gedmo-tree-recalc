@@ -4,40 +4,49 @@ declare(strict_types=1);
 
 namespace DevPack\Tests;
 
-use DevPack\Exception;
 use DevPack\Command\GedmoTreeRecalcCommand;
-use Symfony\Component\Console\Application;
-use PHPUnit\Framework\TestCase;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Console\Tester\CommandTester;
-use Doctrine\ORM\Tools\Setup;
+use DevPack\Exception;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class CommandTest extends TestCase
 {
     private $em;
+    private $command;
+    private $commandTester;
 
     protected function setUp(): void
     {
         $config = Setup::createAnnotationMetadataConfiguration([__DIR__.'/src'], true);
         $conn = [
             'driver' => 'pdo_sqlite',
-            'path' => __DIR__ . '/db.sqlite',
+            'path' => __DIR__.'/db.sqlite',
         ];
+
         $this->em = EntityManager::create($conn, $config);
+        $this->command = new GedmoTreeRecalcCommand($this->em);
+        $this->commandTester = new CommandTester($this->command);
+    }
+
+    public function testIsArgumentNotPassed()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->commandTester->execute([]);
     }
 
     public function testIfEntityNotExist()
     {
-        $command = new GedmoTreeRecalcCommand($this->em);
-        $commandTester = new CommandTester($command);
-
         $this->expectException(Exception\ClassNotExistException::class);
 
-        $commandTester->execute(['className' => 'Tag']);
+        $this->commandTester->execute(['className' => 'Tag']);
     }
 
     protected function tearDown(): void
     {
+        $this->em->getConnection()->close();
     }
 }
