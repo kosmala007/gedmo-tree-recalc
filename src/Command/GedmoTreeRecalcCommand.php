@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DevPack\Command;
 
+use DevPack\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,7 +29,7 @@ class GedmoTreeRecalcCommand extends Command
     {
         $this
             ->setDescription('Recalc Gedmo Tree (Doctrine Behavioral Extensions)')
-            ->addArgument('className', InputArgument::OPTIONAL,
+            ->addArgument('className', InputArgument::REQUIRED,
             'Class name of the entity to recalc (e.g. DeliciousPizza)')
         ;
     }
@@ -37,7 +38,13 @@ class GedmoTreeRecalcCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $output->writeln('Success!!!');
+        $className = $input->getArgument('className');
+        $className = 'App\\Entity\\'.$className;
+        if (!class_exists($className)) {
+            $io->error('Class "'.$className.'" doesn\'t exist!');
+
+            throw new Exception\ClassNotExistException($className);
+        }
 
         return 0;
     }

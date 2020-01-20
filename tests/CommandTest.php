@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DevPack\Tests;
 
+use DevPack\Exception;
 use DevPack\Command\GedmoTreeRecalcCommand;
 use Symfony\Component\Console\Application;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,6 @@ class CommandTest extends TestCase
 
     protected function setUp(): void
     {
-        $isDevMode = true;
         $config = Setup::createAnnotationMetadataConfiguration([__DIR__.'/src'], true);
         $conn = [
             'driver' => 'pdo_sqlite',
@@ -27,15 +27,14 @@ class CommandTest extends TestCase
         $this->em = EntityManager::create($conn, $config);
     }
 
-    public function testExecute()
+    public function testIfEntityNotExist()
     {
         $command = new GedmoTreeRecalcCommand($this->em);
-
         $commandTester = new CommandTester($command);
-        $commandTester->execute([]);
-        $output = $commandTester->getDisplay();
 
-        $this->assertStringContainsString('Success', $output);
+        $this->expectException(Exception\ClassNotExistException::class);
+
+        $commandTester->execute(['className' => 'Tag']);
     }
 
     protected function tearDown(): void

@@ -22,7 +22,8 @@
     "autoload": {
         "psr-4": {
             "DevPack\\": "src/",
-            "DevPack\\Tests\\": "tests/"
+            "DevPack\\Tests\\": "tests/",
+            "App\\Entity\\": "tests/Entity"
         }
     }
 }
