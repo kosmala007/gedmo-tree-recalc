@@ -6,6 +6,7 @@ namespace DevPack\Command;
 
 use DevPack\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,6 +46,10 @@ class GedmoTreeRecalcCommand extends Command
 
             throw new Exception\ClassNotExistException($className);
         }
+
+        $this->meta = $this->em->getClassMetaData($className);
+        $this->nestedTreeRepo = new NestedTreeRepository($this->em, $this->meta);
+        $this->repo = $this->em->getRepository($className);
 
         return 0;
     }
