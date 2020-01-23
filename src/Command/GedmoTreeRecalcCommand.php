@@ -64,6 +64,11 @@ class GedmoTreeRecalcCommand extends Command
 
             throw new Exception\MissingParentSetterException($parentGetterName);
         }
+        if (!$this->clearTreeProperties()) {
+            $io->error('Your tree is incomplete');
+
+            return 0;
+        }
 
         return 0;
     }
@@ -90,5 +95,31 @@ class GedmoTreeRecalcCommand extends Command
         }
 
         return $result;
+    }
+
+    public function clearTreeProperties(): bool
+    {
+        $sqlParts = [];
+        foreach ($this->meta->reflClass->getProperties() as $propertyRef) {
+            if ($this->isTreeProperty($propertyRef, 'TreeLevel')
+                || $this->isTreeProperty($propertyRef, 'TreeLeft')
+                || $this->isTreeProperty($propertyRef, 'TreeRight')
+                || $this->isTreeProperty($propertyRef, 'TreeRoot')
+            ) {
+                $sqlParts[] = $this->meta->getColumnName($propertyRef->getName()).' = 0';
+            }
+        }
+        if (!count($sqlParts)) {
+            return false;
+        }
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare('
+            UPDATE '.$this->meta->getTableName().'
+            SET '.implode(', ', $sqlParts)
+        );
+        $stmt->execute();
+
+        return true;
     }
 }

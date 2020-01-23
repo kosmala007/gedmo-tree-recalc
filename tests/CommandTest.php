@@ -50,6 +50,11 @@ class CommandTest extends TestCase
         $this->commandTester->execute(['className' => 'InvalidCategory']);
     }
 
+    public function testExecute()
+    {
+        $this->commandTester->execute(['className' => 'Category']);
+    }
+
     protected function tearDown(): void
     {
         $this->em->getConnection()->close();
