@@ -43,9 +43,11 @@ class CommandTest extends TestCase
         $this->commandTester->execute(['className' => 'Tag']);
     }
 
-    public function test()
+    public function testInvalidCategory()
     {
-        $this->commandTester->execute(['className' => 'Category']);
+        $this->expectException(Exception\MissingParentGetterException::class);
+
+        $this->commandTester->execute(['className' => 'InvalidCategory']);
     }
 
     protected function tearDown(): void

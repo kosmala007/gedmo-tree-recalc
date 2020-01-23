@@ -51,6 +51,44 @@ class GedmoTreeRecalcCommand extends Command
         $this->nestedTreeRepo = new NestedTreeRepository($this->em, $this->meta);
         $this->repo = $this->em->getRepository($className);
 
+        $parentPropertyName = $this->getParentPropertyName();
+        $parentGetterName = 'get'.ucfirst($parentPropertyName);
+        if (!$this->meta->reflClass->hasMethod($parentGetterName)) {
+            $io->error('You don\'t have "'.$parentGetterName.'()" method in your class');
+
+            throw new Exception\MissingParentGetterException($parentGetterName);
+        }
+        $parentSetterName = 'set'.ucfirst($parentPropertyName);
+        if (!$this->meta->reflClass->hasMethod($parentSetterName)) {
+            $io->error('You don\'t have "'.$parentSetterName.'()" method in your class');
+
+            throw new Exception\MissingParentSetterException($parentGetterName);
+        }
+
         return 0;
+    }
+
+    public function getParentPropertyName(): ?string
+    {
+        $result = null;
+        foreach ($this->meta->reflClass->getProperties() as $propertyRef) {
+            if ($this->isTreeProperty($propertyRef, 'TreeParent')) {
+                $result = $propertyRef->getName();
+            }
+        }
+
+        return $result;
+    }
+
+    public function isTreeProperty(
+        \ReflectionProperty $propertyRef,
+        string $elem
+    ): bool {
+        $result = false;
+        if (false !== strpos($propertyRef->getDocComment(), '@Gedmo\\'.$elem)) {
+            $result = true;
+        }
+
+        return $result;
     }
 }
