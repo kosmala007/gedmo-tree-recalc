@@ -23,6 +23,7 @@ class CommandTest extends TestCase
     {
         $this->em = EntityManagerFactory::create();
         DatabaseService::databaseUp($this->em);
+        AppFixture::load($this->em);
 
         $this->command = new GedmoTreeRecalcCommand($this->em);
         $this->commandTester = new CommandTester($this->command);

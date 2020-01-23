@@ -65,8 +65,9 @@ class Category
      */
     private $lvl;
 
-    public function __construct()
+    public function __construct(?string $name = null)
     {
+        $this->setName($name);
         $this->children = new ArrayCollection();
     }
 
@@ -80,7 +81,7 @@ class Category
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
