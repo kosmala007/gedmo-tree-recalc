@@ -37,7 +37,7 @@ class Category
 
     /**
      * @Gedmo\TreeParent
-     * @ManyToOne(targetEntity="Category", inversedBy="children",)
+     * @ManyToOne(targetEntity="Category", inversedBy="children")
      * @JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
     private $parent;
