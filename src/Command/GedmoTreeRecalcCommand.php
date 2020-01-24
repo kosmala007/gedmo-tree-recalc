@@ -10,6 +10,7 @@ use Gedmo\Exception\InvalidMappingException;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Gedmo\Tree\TreeListener;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -71,6 +72,8 @@ class GedmoTreeRecalcCommand extends Command
         $this->clearTreeProperties();
 
         $entities = $this->repo->findAll();
+        $progressBar = new ProgressBar($output, count($entities));
+        $progressBar->setFormat('debug');
         foreach ($entities as $entity) {
             $parent = $entity->{$parentGetterName}();
 
@@ -81,7 +84,10 @@ class GedmoTreeRecalcCommand extends Command
             $entity->{$parentSetterName}($parent);
             $this->setNewParent($entity, $parent);
             $this->em->flush();
+
+            $progressBar->advance();
         }
+        $progressBar->finish();
         $io->text('');
         $io->success('Modified entities: '.count($entities));
 
