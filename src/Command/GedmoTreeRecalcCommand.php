@@ -6,7 +6,9 @@ namespace DevPack\Command;
 
 use DevPack\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Exception\InvalidMappingException;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Gedmo\Tree\TreeListener;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +24,7 @@ class GedmoTreeRecalcCommand extends Command
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+        $this->treeListener = $this->getTreeListener();
 
         parent::__construct();
     }
@@ -64,13 +67,71 @@ class GedmoTreeRecalcCommand extends Command
 
             throw new Exception\MissingParentSetterException($parentGetterName);
         }
-        if (!$this->clearTreeProperties()) {
-            $io->error('Your tree is incomplete');
 
-            return 0;
+        $this->clearTreeProperties();
+
+        $entities = $this->repo->findAll();
+        foreach ($entities as $entity) {
+            $parent = $entity->{$parentGetterName}();
+
+            $entity->{$parentSetterName}(null);
+            $this->setNewParent($entity, null);
+            $this->em->flush();
+
+            $entity->{$parentSetterName}($parent);
+            $this->setNewParent($entity, $parent);
+            $this->em->flush();
+        }
+        $io->text('');
+        $io->success('Modified entities: '.count($entities));
+
+        $this->nestedTreeRepo->recover();
+        $result = $this->nestedTreeRepo->verify();
+        $this->em->flush();
+        if (is_array($result)) {
+            $io->error('Errors in tree');
+            foreach ($result as $row) {
+                $io->text((string) $row);
+            }
+        } else {
+            $io->success('Tree is verified');
         }
 
-        return 0;
+        return 1;
+    }
+
+    public function setNewParent($node, $newParent)
+    {
+        $this->treeListener
+            ->getStrategy($this->em, $this->meta->name)
+            ->updateNode($this->em, $node, $newParent)
+        ;
+
+        return $node;
+    }
+
+    public function getTreeListener(): TreeListener
+    {
+        $treeListener = null;
+        foreach ($this->em->getEventManager()->getListeners() as $listeners) {
+            foreach ($listeners as $listener) {
+                if ($listener instanceof TreeListener) {
+                    $treeListener = $listener;
+                    break;
+                }
+            }
+            if ($treeListener) {
+                break;
+            }
+        }
+        if (null === $treeListener) {
+            throw new InvalidMappingException(
+                'Tree listener was not found on your entity manager,
+                it must be hooked into the event manager'
+            );
+        }
+
+        return $treeListener;
     }
 
     public function getParentPropertyName(): ?string
@@ -97,29 +158,23 @@ class GedmoTreeRecalcCommand extends Command
         return $result;
     }
 
-    public function clearTreeProperties(): bool
+    public function clearTreeProperties()
     {
-        $sqlParts = [];
+        $qb = $this->em->createQueryBuilder();
+        $qb->update($this->meta->name, 'u');
+
         foreach ($this->meta->reflClass->getProperties() as $propertyRef) {
             if ($this->isTreeProperty($propertyRef, 'TreeLevel')
                 || $this->isTreeProperty($propertyRef, 'TreeLeft')
                 || $this->isTreeProperty($propertyRef, 'TreeRight')
                 || $this->isTreeProperty($propertyRef, 'TreeRoot')
             ) {
-                $sqlParts[] = $this->meta->getColumnName($propertyRef->getName()).' = 0';
+                $prop = $this->meta->getColumnName($propertyRef->getName());
+                $qb->set('u.'.$prop, 0);
             }
         }
-        if (!count($sqlParts)) {
-            return false;
-        }
 
-        $conn = $this->em->getConnection();
-        $stmt = $conn->prepare('
-            UPDATE '.$this->meta->getTableName().'
-            SET '.implode(', ', $sqlParts)
-        );
-        $stmt->execute();
-
-        return true;
+        $qb->getQuery()->execute();
+        $this->em->clear();
     }
 }

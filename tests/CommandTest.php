@@ -53,6 +53,9 @@ class CommandTest extends TestCase
     public function testExecute()
     {
         $this->commandTester->execute(['className' => 'Category']);
+        $output = $this->commandTester->getDisplay();
+
+        $this->assertStringContainsString('Tree is verified', $output);
     }
 
     protected function tearDown(): void
