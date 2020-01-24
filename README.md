@@ -8,7 +8,7 @@ You can easily recalc all the properties of a tree by one command.
 
 ## How it use?
 
-1. Install project or copy only command 😉
+1. Install package or copy only command 😉
 1. Run your symfony console
 
 **Example:**
