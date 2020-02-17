@@ -20,7 +20,7 @@ class GedmoTreeRecalcCommand extends Command
 {
     private $em;
 
-    protected static $defaultName = 'gedmo:tree:recalc';
+    protected static $defaultName = 'devpack:gedmo:tree:recalc';
 
     public function __construct(EntityManagerInterface $em)
     {
