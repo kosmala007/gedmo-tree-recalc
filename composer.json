@@ -1,7 +1,7 @@
 {
     "name": "devpack/gedmo-tree-recalc",
     "description": "Recalc Gedmo Tree (Doctrine Behavioral Extensions)",
-    "type": "library",
+    "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
         {
