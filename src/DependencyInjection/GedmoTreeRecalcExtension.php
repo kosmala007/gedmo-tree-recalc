@@ -19,7 +19,8 @@ class GedmoTreeRecalcExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $fileLocator = new FileLocator(__DIR__.'/../Resources/config');
+        $loader = new YamlFileLoader($container, $fileLocator);
         $loader->load('services.yml');
     }
 }
