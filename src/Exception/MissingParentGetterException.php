@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevPack\Exception;
+namespace DevPack\GedmoTreeRecalc\Exception;
 
 class MissingParentGetterException extends \Exception
 {

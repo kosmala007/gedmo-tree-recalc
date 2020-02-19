@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DevPack\Command;
+namespace DevPack\GedmoTreeRecalc\Command;
 
-use DevPack\Exception;
+use DevPack\GedmoTreeRecalc\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Exception\InvalidMappingException;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;

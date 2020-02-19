@@ -3,7 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use DevPack\Tests\Factory\EntityManagerFactory;
+use DevPack\GedmoTreeRecalc\Tests\Factory\EntityManagerFactory;
 
 $entityManager = EntityManagerFactory::create();
 

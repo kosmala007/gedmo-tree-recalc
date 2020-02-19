@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevPack\Tests\Factory;
+namespace DevPack\GedmoTreeRecalc\Tests\Factory;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
