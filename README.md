@@ -9,7 +9,20 @@ You can easily recalc all the properties of a tree by one command.
 ## How it use?
 
 1. Install package ``composer require devpack/gedmo-tree-recalc`` or copy only command 😉
-1. Run your symfony console
+2. Add bundle to your ``bundles.php`` file
+
+**Example:**
+
+```php
+<?php
+
+return [
+    // ...
+    DevPack\GedmoTreeRecalc\GedmoTreeRecalcBundle::class => ['all' => true],
+];
+```
+
+3. Run your symfony console
 
 **Example:**
 
