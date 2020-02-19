@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DevPack\Tests;
+namespace DevPack\GedmoTreeRecalc\Tests;
 
-use DevPack\Command\GedmoTreeRecalcCommand;
-use DevPack\Exception;
-use DevPack\Tests\Factory\EntityManagerFactory;
-use DevPack\Tests\Fixtures\AppFixture;
-use DevPack\Tests\Service\DatabaseService;
+use DevPack\GedmoTreeRecalc\Command\GedmoTreeRecalcCommand;
+use DevPack\GedmoTreeRecalc\Exception;
+use DevPack\GedmoTreeRecalc\Tests\Factory\EntityManagerFactory;
+use DevPack\GedmoTreeRecalc\Tests\Fixtures\AppFixture;
+use DevPack\GedmoTreeRecalc\Tests\Service\DatabaseService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;

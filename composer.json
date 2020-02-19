@@ -24,8 +24,8 @@
     },
     "autoload": {
         "psr-4": {
-            "DevPack\\": "src/",
-            "DevPack\\Tests\\": "tests/",
+            "DevPack\\GedmoTreeRecalc\\": "src/",
+            "DevPack\\GedmoTreeRecalc\\Tests\\": "tests/",
             "App\\Entity\\": "tests/Entity"
         }
     }

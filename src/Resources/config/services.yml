@@ -1,6 +1,6 @@
 services:
     devpack_gedmo_tree_recalc.command:
-        class: DevPack\Command\GedmoTreeRecalcCommand
+        class: DevPack\GedmoTreeRecalc\Command\GedmoTreeRecalcCommand
         public: true
         arguments:
             - '@doctrine.orm.entity_manager'

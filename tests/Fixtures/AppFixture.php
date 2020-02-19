@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevPack\Tests\Fixtures;
+namespace DevPack\GedmoTreeRecalc\Tests\Fixtures;
 
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;

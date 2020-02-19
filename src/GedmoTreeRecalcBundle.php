@@ -1,6 +1,6 @@
 <?php
 
-namespace DevPack;
+namespace DevPack\GedmoTreeRecalc;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevPack\DependencyInjection;
+namespace DevPack\GedmoTreeRecalc\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

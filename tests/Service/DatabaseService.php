@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevPack\Tests\Service;
+namespace DevPack\GedmoTreeRecalc\Tests\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
